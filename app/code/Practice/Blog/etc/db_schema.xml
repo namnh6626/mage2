@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <!-- Table Blog Attribute -->
+    <table name="blog_attribute" resource="default" engine="innodb" comment="Blog Attributes">
+        <column xsi:type="int" name="blog_attribute_id" unsigned="true" nullable="false" identity="true" comment="Blog Attribute ID"/>
+        <column xsi:type="varchar" name="blog_attribute_name" nullable="false" identity="false" default="0" comment="Blog Attribute Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="blog_attribute_id"/>
+        </constraint>
+    </table>
+
+    <!-- Table Blog Entity -->
+    <table name="blog_entity" resource="default" engine="innodb" comment="Blog Entity">
+        <column xsi:type="int" name="blog_entity_id" unsigned="true" nullable="false" identity="true" comment="Blog Entity ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" default="0" comment="Blog Title"/>
+        <column xsi:type="varchar" name="content" nullable="false" default="0" comment="Blog Content"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" identity="false" default="0" comment="Created at"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" comment="Admin ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="blog_entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" table="blog_entity" column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    </table>
+
+    <!-- Table Blog Attribute Value -->
+    <table name="blog_attribute_value" resource="default" engine="innodb" comment="Blog Attribute Values">
+        <column xsi:type="int" name="blog_attribute_value_id" unsigned="true" nullable="false" identity="true" comment="Blog Attribute Value ID"/>
+        <column xsi:type="int" name="blog_entity_id" nullable="false" default="0" comment="Blog Entity ID"/>
+        <column xsi:type="int" name="blog_attribute_id" nullable="false" default="0" comment="Blog Attribute ID"/>
+        <column xsi:type="varchar" name="attribute_value" nullable="false" identity="false" default="0" comment="Blog Attribute Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="blog_attribute_value_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" column="blog_entity_id" referenceTable="blog_entity" referenceColumn="blog_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" column="blog_attribute_id" referenceTable="blog_attribute" referenceColumn="blog_attribute_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique">
+            <column name="blog_attribute_value_id"/>
+            <column name="blog_entity_id"/>
+            <column name="blog_attribute_id"/>
+        </constraint>
+        <!-- <index referenceId="CATALOG_PRODUCT_ENTITY_DATETIME_ATTRIBUTE_ID" indexType="btree">
+            <column name="attribute_id"/>
+        </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index> -->
+    </table>
+
+
+    <!-- Table Comment Attribute -->
+    <table name="comment_attribute" resource="default" engine="innodb" comment="Comment Attributes">
+        <column xsi:type="int" name="comment_attribute_id" unsigned="true" nullable="false" identity="true" comment="Comment Attribute ID"/>
+        <column xsi:type="varchar" name="comment_attribute_name" nullable="false" identity="false" default="0" comment="Comment Attribute Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="comment_attribute_id"/>
+        </constraint>
+    </table>
+
+
+    <!-- Table Comment Entity -->
+    <table name="comment_entity" resource="default" engine="innodb" comment="Comment Entity">
+        <column xsi:type="int" name="comment_entity_id" unsigned="true" nullable="false" identity="true" comment="Comment Entity ID"/>
+        <column xsi:type="varchar" name="content" nullable="false" default="0" comment="Comment Content"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" identity="false" default="0" comment="Created at"/>
+        <column xsi:type="int" name="blog_entity_id" unsigned="true" nullable="false" comment="Blog Entity ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="comment_entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" table="comment_entity" column="blog_entity_id" referenceTable="blog_entity" referenceColumn="blog_entity_id" onDelete="CASCADE"/>
+    </table>
+
+
+    <!-- Table Comment Attribute Value -->
+    <table name="comment_attribute_value" resource="default" engine="innodb" comment="Blog Attribute Values">
+        <column xsi:type="int" name="comment_attribute_value_id" unsigned="true" nullable="false" identity="true" comment="Comment Attribute Value ID"/>
+        <column xsi:type="int" name="comment_entity_id" nullable="false" default="0" comment="Comment Entity ID"/>
+        <column xsi:type="int" name="comment_attribute_id" nullable="false" default="0" comment="Comment Attribute ID"/>
+        <column xsi:type="varchar" name="attribute_value" nullable="false" identity="false" default="0" comment="Comment Attribute Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="comment_attribute_value_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" table="comment_attribute_value" column="comment_entity_id" referenceTable="comment_entity" referenceColumn="comment_entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" table="comment_attribute_value" column="comment_attribute_id" referenceTable="comment_attribute" referenceColumn="comment_attribute_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique">
+            <column name="comment_attribute_value_id"/>
+            <column name="comment_entity_id"/>
+            <column name="comment_attribute_id"/>
+        </constraint>
+    </table>
+</schema>
