@@ -1,0 +1,7 @@
+<h2>Blog</h2>
+<?php $blogs = $block->getAllBlog() ?>
+<?php foreach ($blogs as $blog) : ?>
+    <li>
+        <?= $blog ?>
+    </li>
+<?php endforeach; ?>
