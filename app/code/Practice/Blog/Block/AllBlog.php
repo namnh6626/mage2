@@ -30,7 +30,10 @@ class AllBlog extends Template
             $currentPage = 1;
         }
         $collection = $this->blogs->create();
-        return $collection->setPageSize($this->pageSize)->setCurPage($currentPage);
+
+        $collectionPaginate = $collection->setPageSize($this->pageSize)->setCurPage($currentPage);
+        $result = $collectionPaginate->join('blog_attribute_value','blog_entity.blog_entity_id=blog_attribute_value.blog_entity_id', '*');
+        return $result;
     }
 
     public function getCurrentPage()
