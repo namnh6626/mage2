@@ -1,10 +1,24 @@
 <a href="http://magento2.test:81/blog/all">All Blog</a>
 <h2>Show</h2>
 <?php
-$comments = $block->getAllComments();
+$blogComments = $block->getBlogComments();
+$blogContentCollection = $block->getBlogContent();
+$blogAttributes = $block->getBlogAttributes();
+// var_dump($blogComments);
+// die();
 
+foreach($blogComments as $comment){
+    echo($comment->getContent());
 
+}
 
 ?>
-<p><?=$block->getBlogContent()->getContent() ?></p>
 
+<?php foreach ($blogContentCollection as $blogContent) : ?>
+    <h3><?= $blogContent->getTitle() ?></h3>
+    <strong>Author:  <?= $blogContent->getFirstname().' '. $blogContent->getLastname() ?></strong>
+    <p><?=date("H:i d/m/Y", strtotime($blogContent->getCreatedAt()));  ?></p>
+
+
+    <?= $blogContent->getContent() ?>
+<?php endforeach; ?>
