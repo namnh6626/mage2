@@ -32,8 +32,10 @@ class AllBlog extends Template
         $collection = $this->blogs->create();
 
         $collectionPaginate = $collection->setPageSize($this->pageSize)->setCurPage($currentPage);
-        $result = $collectionPaginate->join('blog_attribute_value','blog_entity.blog_entity_id=blog_attribute_value.blog_entity_id', '*');
-        return $result;
+
+        // echo $collectionPaginate->getSelect();
+        // die();
+        return $collectionPaginate;
     }
 
     public function getCurrentPage()

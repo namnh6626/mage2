@@ -2,36 +2,32 @@
 
 namespace Practice\Blog\Block;
 
-use Practice\Blog\Model\Blog;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Practice\Blog\Constant\Constant;
 use Practice\Blog\Model\ResourceModel\Comment\CollectionFactory as CommentCollectionFactory;
 use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory as BlogCollectionFactory;
-
-
+use Practice\Blog\Model\ResourceModel\BlogAttributeValue\CollectionFactory as BlogAttributeValueCollectionFactory;
 
 class BlogContent extends Template
 {
-
-    // const ID_PARAM = 'id';
-    protected $blog;
     protected $constant;
     protected $commentCollectionFactory;
-    protected $blogs;
+    protected $blogCollectionFactory;
+    protected $blogAttributeValueCollectionFactory;
 
     public function __construct(
         Context $context,
-        Blog $blog,
         array $data = [],
         Constant $constant,
         CommentCollectionFactory $commentCollectionFactory,
-        BlogCollectionFactory $blogCollectionFactory
+        BlogCollectionFactory $blogCollectionFactory,
+        BlogAttributeValueCollectionFactory $blogAttributeValueCollectionFactory
     ) {
-        $this->blog = $blog;
         $this->blogCollectionFactory = $blogCollectionFactory;
         $this->commentCollectionFactory = $commentCollectionFactory;
         $this->constant = $constant;
+        $this->blogAttributeValueCollectionFactory = $blogAttributeValueCollectionFactory;
         parent::__construct($context, $data);
     }
 
@@ -53,13 +49,14 @@ class BlogContent extends Template
     {
         $blogId = $this->getRequest()->getParam($this->constant::ID_PARAM);
 
-        $blogAttributes = $this->blogCollectionFactory->create();
+        $blogAttributes = $this->blogAttributeValueCollectionFactory->create();
         $blogAttributes->getSelect()
-
-            ->join('blog_attribute_value', 'blog_attribute_value.blog_entity_id = main_table.blog_entity_id', ['attribute_value'])
-            ->join('blog_attribute', 'blog_attribute.blog_attribute_id = blog_attribute_value.blog_attribute_id', ['blog_attribute_name'])
+        ->join('blog_attribute', 'blog_attribute.blog_attribute_id = main_table.blog_attribute_id', ['blog_attribute_name'])
+            ->join('blog_entity', 'blog_entity.blog_entity_id = main_table.blog_entity_id', [''])
             ->where('main_table.blog_entity_id = ' . $blogId);
 
+            // echo   $blogAttributes->getSelect();
+            // die();
         return $blogAttributes;
     }
 
@@ -73,10 +70,9 @@ class BlogContent extends Template
         $blogComments->getSelect()
             ->join('blog_entity', 'blog_entity.blog_entity_id = main_table.blog_entity_id', ['blog_entity.blog_entity_id'])
             ->join('comment_status', 'comment_status.comment_status_id = main_table.comment_status_id', ['comment_status.comment_status_name'])
-            ->join('customer_entity', 'main_table.customer_id = customer_entity.entity_id', ['customer_entity.email'])
+            ->join('customer_entity', 'main_table.customer_id = customer_entity.entity_id', ['email', 'firstname', 'middlename', 'lastname'])
             ->where('main_table.blog_entity_id = ' . $blogId);
-        // echo $blogComments->getSelect();
-        // die();
+
 
         return $blogComments;
     }
