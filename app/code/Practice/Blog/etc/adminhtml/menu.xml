@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Practice_Blog::admin" title="Practice Blog" module="Practice_Blog" sortOrder="31" resource="Practice_Blog::admin"/>
+        <add id="Practice_Blog::blog" title="Blog" module="Practice_Blog" sortOrder="40" resource="Practice_Blog::blog" parent="Practice_Blog::admin" />
+        <add id="Practice_Blog::all_blog" title="All blogs" module="Practice_Blog" sortOrder="41" action="blog/post/index" resource="Practice_Blog::all_blog" parent="Practice_Blog::blog"/>
+        <add id="Practice_Blog::add_blog" title="Add new blog" module="Practice_Blog" sortOrder="42" action="blog/post/add" resource="Practice_Blog::add_blog" parent="Practice_Blog::blog"/>
+
+        <add id="Practice_Blog::comment" title="Comment" module="Practice_Blog" sortOrder="40" resource="Practice_Blog::comment" parent="Practice_Blog::admin" />
+        <add id="Practice_Blog::all_comment" title="All comment" module="Practice_Blog" sortOrder="42" action="blog/comment/index" resource="Practice_Blog::all_comment" parent="Practice_Blog::comment"/>
+
+    </menu>
+</config>

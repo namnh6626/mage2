@@ -1,0 +1,15 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+ <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="practice_blog_post_listing_data_source" xsi:type="string">Practice\Blog\Model\ResourceModel\Blog\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Practice\Blog\Model\ResourceModel\Blog\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">blog_entity</argument>
+            <argument name="resourceModel" xsi:type="string">Practice\Blog\Model\ResourceModel\Blog</argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Practice_Blog::admin" title="Practice Blog">
+                    <resource id="Practice_Blog::blog" title="Blog" sortOrder="20">
+                        <resource id="Practice_Blog::all_blog" title="All Practice Blog" />
+                        <resource id="Practice_Blog::add_blog" title="Add Practice Blog " />
+                    </resource>
+
+                     <resource id="Practice_Blog::comment" title="Comment" sortOrder="21">
+                        <resource id="Practice_Blog::all_comment" title="All Practice Blog Comment" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
