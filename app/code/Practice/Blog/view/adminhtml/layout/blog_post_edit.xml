@@ -2,8 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Practice\Blog\Block\Adminhtml\AllBlog" name="admin_blog_post_index" template="Practice_Blog::admin_all_blog.phtml"/>
-             <uiComponent name="practice_blog_post_listing"/>
+            <block class="Practice\Blog\Block\Adminhtml\ShowBlog" name="admin_blog_post_edit" template="Practice_Blog::admin_edit_blog.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -2,7 +2,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="\Practice\Blog\Block\Adminhtml\AddBlog" name="admin_add_new_blog" template="Practice_Blog::admin_add_new_blog.phtml" />
+            <block class="\Practice\Blog\Block\Adminhtml\AddBlog" name="admin_blog_post_add" template="Practice_Blog::admin_add_new_blog.phtml" />
+            <uiComponent name="practice_blog_post_add"/>
         </referenceContainer>
     </body>
 </page>
