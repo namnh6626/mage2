@@ -33,8 +33,6 @@ class AllBlog extends Template
 
         $collectionPaginate = $collection->setPageSize($this->pageSize)->setCurPage($currentPage);
 
-        // echo $collectionPaginate->getSelect();
-        // die();
         return $collectionPaginate;
     }
 

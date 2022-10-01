@@ -8,6 +8,7 @@ use Magento\Framework\App\Action\Context;
 
 use Magento\Framework\View\Result\PageFactory;
 use Practice\Blog\Model\Blog;
+use Practice\Blog\Model\BlogCategory;
 
 
 
@@ -43,6 +44,8 @@ class Index extends Action
         //     $blogElement->save();
         //     $blogElement->unsetData();
         // }
+
+
 
 
         return ($this->pageFactory->create());

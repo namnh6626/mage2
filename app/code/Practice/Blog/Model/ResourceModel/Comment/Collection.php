@@ -8,4 +8,6 @@ class Collection extends AbstractCollection{
     public function _construct(){
         $this->_init('Practice\Blog\Model\Comment', 'Practice\Blog\Model\ResourceModel\Comment');
     }
+
+
 }

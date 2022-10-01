@@ -1,10 +1,10 @@
 <?php
-namespace Practice\Blog\Model\Blog;
+namespace Practice\Blog\Model\DataProvider;
 
 use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
-class DataProvider extends AbstractDataProvider
+class Blog extends AbstractDataProvider
 {
     protected $loadedData;
 
@@ -13,6 +13,8 @@ class DataProvider extends AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $blogCollectionFactory,
+
+
         array $meta = [],
         array $data = []
     ) {

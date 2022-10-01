@@ -16,7 +16,13 @@ class AllBlog extends Template {
     public function getAllBlog(){
         $blogCollection = $this->blogCollectionFactory->create();
         $blogCollection->getSelect()
-        ->join('admin_user', 'admin_user.user_id=main_table.user_id', ['main_table.user_id'=>'author_id', 'firstname', 'lastname']);
+            ->join('admin_user', 'admin_user.user_id=main_table.user_id', ['main_table.user_id'=>'author_id', 'firstname', 'lastname']);
+        return $blogCollection;
+    }
+
+    public function getAll(){
+        $blogCollection = $this->blogCollectionFactory->create();
+
         return $blogCollection;
     }
 }

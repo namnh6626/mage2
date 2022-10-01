@@ -5,7 +5,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Practice\Blog\Block\AllBlog" name="allblogblog" template="Practice_Blog::blog.phtml" />
+            <block class="Practice\Blog\Block\AllBlog" name="all_blog_index" template="Practice_Blog::blog.phtml"></block>
         </referenceContainer>
     </body>
 </page>

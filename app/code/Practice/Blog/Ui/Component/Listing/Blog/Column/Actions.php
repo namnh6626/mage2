@@ -1,6 +1,6 @@
 <?php
 
-namespace Practice\Blog\Ui\Component\Listing\Column;
+namespace Practice\Blog\Ui\Component\Listing\Blog\Column;
 
 use Magento\Ui\Component\Listing\Columns\Column;
 
@@ -27,6 +27,7 @@ class Actions extends Column
                         'href' => '/admin/blog/post/show/id/'.$blogId,
                         'label' => __('Show')
                     ],
+
                 ];
             }
         }

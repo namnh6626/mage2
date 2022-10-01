@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+
+        <item name="js_config" xsi:type="array">
+
+            <item name="provider" xsi:type="string">practice_blog_post_edit.practice_blog_post_data_source</item>
+
+            <item name="deps" xsi:type="string">practice_blog_post_edit.practice_blog_post_data_source</item>
+
+        </item>
+
+
+        <item name="config" xsi:type="array">
+
+            <item name="dataScope" xsi:type="string">data</item>
+
+            <item name="namespace" xsi:type="string">practice_blog_post_edit</item>
+
+        </item>
+
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+
+        <item name="buttons" xsi:type="array">
+
+            <item name="save" xsi:type="string">Practice\Blog\Block\Adminhtml\Button\Edit</item>
+
+        </item>
+
+    </argument>
+
+
+    <dataSource name="practice_blog_post_data_source">
+
+        <argument name="dataProvider" xsi:type="configurableObject">
+
+            <argument name="class" xsi:type="string">Practice\Blog\Model\DataProvider\Blog</argument>
+
+            <argument name="name" xsi:type="string">practice_blog_post_data_source</argument>
+
+            <argument name="primaryFieldName" xsi:type="string">blog_entity_id</argument>
+
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+
+            <argument name="data" xsi:type="array">
+
+                <item name="config" xsi:type="array">
+
+                    <item name="submit_url" xsi:type="url" path="*/*/update"/>
+
+                </item>
+
+            </argument>
+
+        </argument>
+
+        <argument name="data" xsi:type="array">
+
+            <item name="js_config" xsi:type="array">
+
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+
+            </item>
+
+        </argument>
+
+    </dataSource>
+
+
+    <fieldset name="blog_entity">
+
+        <argument name="data" xsi:type="array">
+
+            <item name="config" xsi:type="array">
+
+                <item name="collapsible" xsi:type="boolean">false</item>
+
+                <item name="label" xsi:type="string" translate="true">Blog</item>
+
+                <item name="sortOrder" xsi:type="number">20</item>
+
+            </item>
+
+        </argument>
+
+        <field name="title">
+
+            <argument name="data" xsi:type="array">
+
+                <item name="config" xsi:type="array">
+
+                    <item name="dataType" xsi:type="string">text</item>
+
+                    <item name="label" xsi:type="string" translate="true">Blog Title</item>
+
+                    <item name="formElement" xsi:type="string">input</item>
+
+                    <item name="source" xsi:type="string">title</item>
+
+                    <item name="dataScope" xsi:type="string">title</item>
+
+                    <item name="required" xsi:type="boolean">true</item>
+
+                    <item name="validation" xsi:type="array">
+
+                        <item name="required-entry" xsi:type="boolean">true</item>
+
+                    </item>
+                </item>
+
+            </argument>
+
+        </field>
+
+        <field name="blog_avatar_link">
+
+            <argument name="data" xsi:type="array">
+
+                <item name="config" xsi:type="array">
+
+                    <item name="dataType" xsi:type="string">text</item>
+
+                    <item name="label" xsi:type="string" translate="true">Link Blog Avatar</item>
+
+                    <item name="formElement" xsi:type="string">input</item>
+
+                    <item name="source" xsi:type="string">blog_avatar_link</item>
+
+                    <item name="dataScope" xsi:type="string">blog_avatar_link</item>
+
+                </item>
+
+            </argument>
+
+        </field>
+
+        <field name="category">
+
+            <argument name="data" xsi:type="array">
+
+                <item name="options" xsi:type="object">Practice\Blog\Model\BlogCategory\Options</item>
+
+                <item name="config" xsi:type="array">
+
+                    <item name="additionalClasses" xsi:type="string">required</item>
+
+                    <item name="dataType" xsi:type="string">text</item>
+
+                    <item name="label" xsi:type="string" translate="true">Blog Categories</item>
+
+                    <item name="componentType" xsi:type="string">field</item>
+
+                    <item name="formElement" xsi:type="string">select</item>
+
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+
+                    <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+
+                    <item name="dataScope" xsi:type="string">category</item>
+
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+
+                    <item name="showCheckbox" xsi:type="boolean">true</item>
+
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+
+                    <item name="multiple" xsi:type="boolean">true</item>
+
+                    <item name="levelsVisibility" xsi:type="number">1</item>
+
+                    <item name="required" xsi:type="boolean">true</item>
+
+                    <item name="validation" xsi:type="array">
+
+                        <item name="required-entry" xsi:type="boolean">false</item>
+
+                    </item>
+
+                </item>
+            </argument>
+
+        </field>
+
+        <field name="content" sortOrder="10" formElement="wysiwyg" template="ui/form/field">
+
+            <argument name="data" xsi:type="array">
+
+                <item name="config" xsi:type="array">
+
+                    <item name="source" xsi:type="string">page</item>
+
+                    <item name="wysiwygConfigData" xsi:type="array">
+
+                        <item name="is_pagebuilder_enabled" xsi:type="boolean">false</item>
+
+                        <item name="toggle_button" xsi:type="boolean">true</item>
+
+                        <item name="height" xsi:type="string">800px</item>
+
+                        <item name="width" xsi:type="string">1000px</item>
+
+                        <item name="add_variables" xsi:type="boolean">true</item>
+
+                        <item name="add_directives" xsi:type="boolean">true</item>
+
+                    </item>
+
+                </item>
+
+            </argument>
+
+            <settings>
+
+                <label translate="true">Contents</label>
+
+                <dataScope>content</dataScope>
+
+            </settings>
+
+            <formElements>
+
+                <wysiwyg>
+
+                    <settings>
+
+                        <rows>5</rows>
+
+                        <wysiwyg>true</wysiwyg>
+
+                    </settings>
+
+                </wysiwyg>
+
+            </formElements>
+
+        </field>
+
+    </fieldset>
+
+
+</form>

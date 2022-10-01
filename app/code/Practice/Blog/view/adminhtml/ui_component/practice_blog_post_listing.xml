@@ -27,21 +27,47 @@
                         <item name="url" xsi:type="url" path="blog/post/delete"/>
                         <item name="confirm" xsi:type="array">
                             <item name="title" xsi:type="string" translate="true">Delete Post</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected posts?</item>
                         </item>
                     </item>
                 </argument>
             </action>
 
+            <action name="approve">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">approve</item>
+                        <item name="label" xsi:type="string" translate="true">Approve</item>
+                        <item name="url" xsi:type="url" path="blog/post/approve"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Approve Post</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to approve selected posts?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
 
+<action name="decline">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">decline</item>
+                        <item name="label" xsi:type="string" translate="true">Decline</item>
+                        <item name="url" xsi:type="url" path="blog/post/decline"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Decline Post</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to decline selected posts?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging"/>
         <exportButton name="export_button"/>
     </listingToolbar>
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">practice_blog_post_listing.practice_blog_post_listing_data_source</item>
-            <item name="deps" xsi:type="string">practice_blog_post_listing.practice_blog_post_listing_data_source</item>
+            <item name="provider" xsi:type="string">practice_blog_post_listing.practice_blog_post_data_source</item>
+            <item name="deps" xsi:type="string">practice_blog_post_listing.practice_blog_post_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">spinner_columns</item>
         <item name="buttons" xsi:type="array">
@@ -56,9 +82,11 @@
     <dataSource name="nameOfDataSource">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">practice_blog_post_listing_data_source</argument>
+            <!-- <argument name="class" xsi:type="string">Practice\Blog\Model\DataProvider\Blog</argument> -->
+
+            <argument name="name" xsi:type="string">practice_blog_post_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">blog_entity_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">blog_entity_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
@@ -106,7 +134,7 @@
             </argument>
         </column>
 
-        <column name="user_id">
+        <column name="blog_status_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -116,7 +144,22 @@
                             <item name="required-entry" xsi:type="boolean">true</item>
                         </item>
                     </item>
-                    <item name="label" xsi:type="string" translate="true">Author ID</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="email">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">text</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                    <item name="label" xsi:type="string" translate="true">Author Email</item>
                 </item>
             </argument>
         </column>
@@ -142,11 +185,11 @@
             </argument>
         </column>
 
-        <actionsColumn name="actions" class="Practice\Blog\Ui\Component\Listing\Column\Actions">
+        <actionsColumn name="actions" class="Practice\Blog\Ui\Component\Listing\Blog\Column\Actions">
             <settings>
                 <label translate="true">Actions</label>
             </settings>
-             <argument name="data" xsi:type="array">
+            <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">blog_entity_id</item>
                 </item>

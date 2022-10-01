@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <!-- Table Blog Attribute -->
-    <table name="blog_attribute" resource="default" engine="innodb" comment="Blog Attributes">
-        <column xsi:type="int" name="blog_attribute_id" unsigned="true" nullable="false" identity="true" comment="Blog Attribute ID"/>
-        <column xsi:type="varchar" name="blog_attribute_name" nullable="false" identity="false" default="0" comment="Blog Attribute Name"/>
+
+    <!-- Table Blog Category -->
+    <table name="blog_category" resource="default" engine="innodb" comment="Blog Category">
+        <column xsi:type="int" name="blog_category_id" unsigned="true" nullable="false" identity="true" comment="Blog Category ID"/>
+        <column xsi:type="varchar" name="blog_category_name" nullable="false" identity="false" default="0" comment="Blog Category Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="blog_attribute_id"/>
+            <column name="blog_category_id"/>
+        </constraint>
+        <constraint xsi:type="unique">
+            <column name="blog_category_name"/>
+        </constraint>
+    </table>
+
+    <!-- Table Blog Status -->
+    <table name="blog_status" resource="default" engine="innodb" comment="Blog Status">
+        <column xsi:type="int" name="blog_status_id" unsigned="true" nullable="false" identity="true" comment="Blog Status ID"/>
+        <column xsi:type="varchar" name="blog_status_name" nullable="false" identity="false" default="0" comment="Blog Status Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="blog_status_id"/>
+        </constraint>
+        <constraint xsi:type="unique">
+            <column name="blog_status_name"/>
         </constraint>
     </table>
 
@@ -14,32 +30,30 @@
         <column xsi:type="int" name="blog_entity_id" unsigned="true" nullable="false" identity="true" comment="Blog Entity ID"/>
         <column xsi:type="varchar" name="title" nullable="false" default="0" comment="Blog Title"/>
         <column xsi:type="text" name="content" length="20000" nullable="false" default="0" comment="Blog Content"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" identity="false" default="CURRENT_TIMESTAMP" comment="Created at"/>
-        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" comment="Admin ID"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" comment="Author ID"/>
+        <column xsi:type="int" name="blog_status_id" unsigned="true" nullable="false" comment="Blog Status ID"/>
         <column xsi:type="varchar" name="blog_avatar_link" nullable="false" default="https://era.vn/wp-content/uploads/2016/08/viet-blog-tren-website.jpg" comment="Blog Link Avatar"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" identity="false" default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" identity="false" default="CURRENT_TIMESTAMP" comment="Updated at"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="blog_entity_id"/>
         </constraint>
         <constraint xsi:type="foreign" table="blog_entity" column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" table="blog_entity" column="blog_status_id" referenceTable="blog_status" referenceColumn="blog_status_id" onDelete="CASCADE"/>
     </table>
 
-    <!-- Table Blog Attribute Value -->
-    <table name="blog_attribute_value" resource="default" engine="innodb" comment="Blog Attribute Value">
-        <column xsi:type="int" name="blog_attribute_value_id" unsigned="true" nullable="false" identity="true" comment="Blog Attribute Value ID"/>
+    <!-- Table Blog Category Value -->
+    <table name="blog_category_value" resource="default" engine="innodb" comment="Blog Status">
         <column xsi:type="int" name="blog_entity_id" unsigned="true" nullable="false" comment="Blog Entity ID"/>
-        <column xsi:type="int" name="blog_attribute_id" unsigned="true" nullable="false" comment="Blog Attribute ID"/>
-        <column xsi:type="varchar" name="attribute_value" nullable="false" identity="false" default="0" comment="Blog Attribute Value"/>
-        <constraint xsi:type="foreign" table="blog_attribute_value" column="blog_attribute_id" referenceTable="blog_attribute" referenceColumn="blog_attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" table="blog_attribute_value" column="blog_entity_id" referenceTable="blog_entity" referenceColumn="blog_entity_id" onDelete="CASCADE"/>
+        <column xsi:type="int" name="blog_category_id" unsigned="true" nullable="false" comment="Blog Category ID"/>
+        <constraint xsi:type="foreign" table="blog_category_value" column="blog_entity_id" referenceTable="blog_entity" referenceColumn="blog_entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" table="blog_category_value" column="blog_category_id" referenceTable="blog_category" referenceColumn="blog_category_id" onDelete="CASCADE"/>
         <constraint xsi:type="unique">
-            <column name="attribute_value"/>
+            <column name="blog_category_id"/>
             <column name="blog_entity_id"/>
-            <column name="blog_attribute_id"/>
-        </constraint>
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="blog_attribute_value_id"/>
         </constraint>
     </table>
+
 
     <!-- Table Comment Status -->
     <table name="comment_status" resource="default" engine="innodb" comment="Comment Statuses">
