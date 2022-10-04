@@ -1,0 +1,70 @@
+{
+    "blog_category": {
+        "column": {
+            "blog_category_id": true,
+            "blog_category_name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BLOG_CATEGORY_BLOG_CATEGORY_NAME": true
+        }
+    },
+    "blog_status": {
+        "column": {
+            "blog_status_id": true,
+            "blog_status_name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BLOG_STATUS_BLOG_STATUS_NAME": true
+        }
+    },
+    "blog_entity": {
+        "column": {
+            "blog_entity_id": true,
+            "title": true,
+            "content": true,
+            "user_id": true,
+            "blog_status_id": true,
+            "blog_avatar_link": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BLOG_ENTITY_BLOG_STATUS_ID_BLOG_STATUS_BLOG_STATUS_ID": true
+        }
+    },
+    "blog_category_value": {
+        "column": {
+            "blog_entity_id": true,
+            "blog_category_id": true
+        },
+        "constraint": {
+            "BLOG_CATEGORY_VALUE_BLOG_CATEGORY_ID_BLOG_ENTITY_ID": true
+        }
+    },
+    "comment_status": {
+        "column": {
+            "comment_status_id": true,
+            "comment_status_name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "comment_entity": {
+        "column": {
+            "comment_entity_id": true,
+            "content": true,
+            "created_at": true,
+            "blog_entity_id": true,
+            "customer_id": true,
+            "comment_status_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMMENT_ENTT_COMMENT_STS_ID_COMMENT_STS_COMMENT_STS_ID": true
+        }
+    }
+}
