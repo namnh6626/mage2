@@ -10,6 +10,8 @@ use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory as BlogCollectionFa
 use Practice\Blog\Model\Blog;
 use Practice\Blog\Model\ResourceModel\BlogCategory\CollectionFactory as BlogCategoryCollectionFactory;
 use Magento\Customer\Model\Session;
+use Practice\Blog\Model\BlogFactory;
+use Practice\Blog\Model\BlogRepository;
 
 class BlogContent extends Template
 {
@@ -18,6 +20,8 @@ class BlogContent extends Template
     protected $blogCategoryCollectionFactory;
     protected $customerSession;
     protected $blog;
+    protected $blogRepository;
+    protected $blogFactory;
 
     public function __construct(
         Context $context,
@@ -26,34 +30,49 @@ class BlogContent extends Template
         BlogCollectionFactory $blogCollectionFactory,
         BlogCategoryCollectionFactory $blogCategoryCollectionFactory,
         Session $customerSession,
-        Blog $blog
+        Blog $blog,
+        BlogRepository $blogRepository,
+        BlogFactory $blogFactory
     ) {
         $this->blogCollectionFactory = $blogCollectionFactory;
         $this->commentCollectionFactory = $commentCollectionFactory;
         $this->blogCategoryCollectionFactory = $blogCategoryCollectionFactory;
         $this->customerSession = $customerSession;
         $this->blog = $blog;
+        $this->blogRepository = $blogRepository;
+        $this->blogFactory = $blogFactory;
         parent::__construct($context, $data);
     }
 
-    public function getBlogContent()
-    {
+
+    public function getBlogContent(){
         $blogId = $this->getRequest()->getParam(Constant::ID_PARAM);
-
-        // $blog = $this->blog->load($blogId, 'blog_entity_id');
-
-        $blogCollection = $this->blogCollectionFactory->create();
-        $blogCollection->getSelect()
-            ->join('admin_user', 'admin_user.user_id=main_table.user_id', ['admin_user.firstname', 'admin_user.lastname', 'admin_user.email'])
-            ->where('main_table.blog_entity_id = ' . $blogId);
-        $blog = $this->blog->load($blogId, 'blog_entity_id');
-        // ->join('admin_user', 'admin_user.user_id=main_table.user_id', ['admin_user.firstname', 'admin_user.lastname', 'admin_user.email'])
-        // ->where('main_table.blog_entity_id = ' . $blogId);
-        // var_dump($blog->getData());
+        // var_dump($blogId);
         // die();
 
-        return $blogCollection;
+        $blog = $this->blog->load($blogId);
+
+        $blog = $this->blogFactory->create();
+
+        return $blog->getBlog();
+        //     var_dump($blog->getBlog());
+        //     die();
+        // return $blog;
     }
+
+    // public function getBlogContent1()
+    // {
+    //     $blogId = $this->getRequest()->getParam(Constant::ID_PARAM);
+
+
+    //     $blogCollection = $this->blogCollectionFactory->create();
+    //     $blogCollection->getSelect()
+    //         ->join('admin_user', 'admin_user.user_id=main_table.user_id', ['admin_user.firstname', 'admin_user.lastname', 'admin_user.email'])
+    //         ->where('main_table.blog_entity_id = ' . $blogId);
+    //     $blog = $this->blog->load($blogId, 'blog_entity_id');
+
+    //     return $blogCollection;
+    // }
 
     public function getBlogCategory()
     {
@@ -86,13 +105,14 @@ class BlogContent extends Template
             ->join('comment_status', 'comment_status.comment_status_id = main_table.comment_status_id', ['comment_status.comment_status_name'])
             ->join('customer_entity', 'main_table.customer_id = customer_entity.entity_id', ['email', 'firstname', 'middlename', 'lastname'])
             ->where('main_table.blog_entity_id = ' . $blogId)
-            ->where('main_table.comment_status_id = ' . Constant::COMMENT_APPROVED_STATUS_ID)
+            ->where('main_table.comment_status_id = ' . Constant::APPROVED_STATUS_ID)
             ->orWhere('main_table.customer_id = '.$customerId)
             ->order('created_at DESC');
         // echo $blogComments->getSelect();
         // die();
         return $blogComments;
     }
+
 
 
 
