@@ -6,17 +6,17 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface BlogInterface extends ExtensibleDataInterface
 {
-    CONST BLOG_ENTITY_ID = 'blog_entity_id';
-    CONST BLOG_CONTENT = 'content';
-    CONST BLOG_TITLE = 'title';
-    CONST BLOG_USER_ID = 'user_id';
-    CONST BLOG_AVATAR = 'blog_avatar_link';
-    CONST BLOG_CREATED_AT = 'created_at';
+    const BLOG_ENTITY_ID = 'blog_entity_id';
+    const BLOG_CONTENT = 'content';
+    const BLOG_TITLE = 'title';
+    const BLOG_USER_ID = 'user_id';
+    const BLOG_AVATAR = 'blog_avatar_link';
+    const BLOG_CREATED_AT = 'created_at';
 
 
-    // public function getBlogEntityId();
+    public function getBlogEntityId(): int;
 
-    // public function setBlogEntityId($id);
+    public function setBlogEntityId($id);
 
     public function getTitle();
 
@@ -26,7 +26,7 @@ interface BlogInterface extends ExtensibleDataInterface
 
     public function setContent($content);
 
-    public function getUserId();
+    public function getUserId(): int;
 
     public function setUserId($userId);
 
