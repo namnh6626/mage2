@@ -1,6 +1,6 @@
 <?php
 
-namespace Practice\Blog\Model\Repository;
+namespace Practice\Blog\Model\ResourceModel;
 
 use Practice\Blog\Api\BlogCategoryRepositoryInterface;
 use Practice\Blog\Api\Data\BlogCategoryInterface;
