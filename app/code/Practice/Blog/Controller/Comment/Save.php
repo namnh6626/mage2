@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Practice\Blog\Model\Comment;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Customer\Model\Session;
+use Practice\Blog\Constant\Constant;
 
 
 
@@ -63,6 +64,10 @@ class Save extends Action
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
+
+        $senderName = Constant::EMAIL_SENDER_COMMENT_SUCCESS;
+        $senderEmail = Constant::NAME_SENDER_COMMENT_SUCCESS;
+        $addToEmail = $this->customerSession->getCustomer()->getEmail();
 
         $this->_eventManager->dispatch('customer_comment_success');
 

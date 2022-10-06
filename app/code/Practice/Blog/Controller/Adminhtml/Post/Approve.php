@@ -1,28 +1,28 @@
 <?php
 
-namespace Practice\Blog\Controller\Adminhtml\Comment;
+namespace Practice\Blog\Controller\Adminhtml\Post;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultFactory;
-use Practice\Blog\Model\ResourceModel\Comment\CollectionFactory;
+use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Psr\Log\LoggerInterface;
 use Practice\Blog\Constant\Constant;
 
-class Decline extends Action
+class Approve extends Action
 {
     protected $pageFactory;
-    protected $commentCollectionFactory;
+    protected $blogCollectionFactory;
     protected $filter;
     protected $logger;
 
-    public function __construct(Context $context, PageFactory $pageFactory, CollectionFactory $commentCollectionFactory, Filter $filter, LoggerInterface $logger)
+    public function __construct(Context $context, PageFactory $pageFactory, CollectionFactory $blogCollectionFactory, Filter $filter, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->filter = $filter;
-        $this->commentCollectionFactory = $commentCollectionFactory;
+        $this->blogCollectionFactory = $blogCollectionFactory;
         $this->pageFactory = $pageFactory;
         parent::__construct($context);
     }
@@ -30,15 +30,17 @@ class Decline extends Action
     public function execute()
     {
         try {
-            $collection = $this->filter->getCollection($this->commentCollectionFactory->create());
+            $collection = $this->filter->getCollection($this->blogCollectionFactory->create());
 
-            foreach ($collection as $comment) {
-                $comment->setData('comment_status_id', Constant::DECLINED_STATUS_ID);
-                $comment->save();
+            foreach ($collection as $blog) {
+                $blog->setData('blog_status_id', Constant::APPROVED_STATUS_ID);
+                $blog->save();
             }
+
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
         return $this->_redirect($this->_redirect->getRefererUrl());
+
     }
 }

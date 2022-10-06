@@ -2,13 +2,11 @@
 
 namespace Practice\Blog\Controller\All;
 
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 
 use Magento\Framework\View\Result\PageFactory;
 use Practice\Blog\Model\Blog;
-use Practice\Blog\Model\BlogCategory;
 
 
 

@@ -9,6 +9,8 @@ use Practice\Blog\Model\Blog;
 use Practice\Blog\Constant\Constant;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Backend\Model\Auth\Session;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
+use Practice\Blog\Api\Data\BlogInterface;
 
 class Update extends Action
 {
@@ -16,18 +18,25 @@ class Update extends Action
     protected $blog;
     protected $resourceConnection;
     protected $authSession;
+    protected $blogRepository;
+    protected $blogInterface;
 
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
         Blog $blog,
         ResourceConnection $resourceConnection,
-        Session $authSession
+        Session $authSession,
+        BlogRepository $blogRepository,
+        BlogInterface $blogInterface
     ) {
         $this->blog = $blog;
         $this->pageFactory = $pageFactory;
         $this->resourceConnection = $resourceConnection;
         $this->authSession = $authSession;
+        $this->blogRepository = $blogRepository;
+        $this->blogInterface = $blogInterface;
+
         parent::__construct($context);
     }
 
@@ -35,6 +44,7 @@ class Update extends Action
     {
         $params = $this->getRequest()->getParams();
 
+        $blogCategories = [];
         $blogTitle = $params['title'];
         $blogContent = $params['content'];
         if (isset($params['category'])) {
@@ -43,17 +53,22 @@ class Update extends Action
         $blogAvatar = $params['blog_avatar_link'];
         $blogId = $params['blog_entity_id'];
 
+        // $blog = $this->blog->load($blogId, 'blog_entity_id');
 
+        $blog = $this->blogRepository->getById($blogId);
 
-        $blog = $this->blog->load($blogId, 'blog_entity_id');
+        // $blog->setData('title', $blogTitle);
+        // $blog->setData('content', $blogContent);
+        // $blog->setData('blog_avatar_link', $blogAvatar);
+        // $blog->setData('user_id', $this->authSession->getUser()->getId());
+        // $blog->save();
 
-        $blog->setData('title', $blogTitle);
-        $blog->setData('content', $blogContent);
-        $blog->setData('blog_avatar_link', $blogAvatar);
-        $blog->setData('user_id', $this->authSession->getUser()->getId());
+        $this->blogInterface->setTitle($blogTitle);
+        $this->blogInterface->setContent($blogContent);
+        $this->blogInterface->setBlogAvatarLink($blogAvatar);
+        $this->blogInterface->setUserId($this->authSession->getUser()->getId());
 
-        $blog->save();
-
+        $this->blogRepository->update($this->blogInterface, $blog);
 
         $connection = $this->resourceConnection->getConnection();
         if (count($blogCategories) > 0) {
