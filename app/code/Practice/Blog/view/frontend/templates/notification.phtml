@@ -1,0 +1,25 @@
+<?php
+$notificationCollection = $block->getNotification();
+// var_dump($notificationCollection->getData());
+// die();
+?>
+
+
+<div class="notify" style="display: flex;justify-content: end;">
+    <span>Notify</span>
+
+</div>
+
+<style>
+    #notification>a:before {
+        content: '';
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNiAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1b GU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iT TI2IDBIMTguNzUzNlYxLjQ5MzM5QzE3LjAzNyAwLjU0MTk1NSAxNS4wNjA2IDAgMTIuOTU2NSAwQzYuMzYyMzI gMCAxIDUuMzgxODIgMSAxMkMxIDE4LjYxODIgNi4zNjIzMiAyNCAxMi45NTY1IDI0QzE1LjA1ODcgMjQgMTcuMD M1NyAyMy40NTMxIDE4Ljc1MzYgMjIuNDkzNVYyNEgyNlYwW k03LjM0MDU4IDEyQzcuMzQwNTggMTUuMTI3MyA5Ljg3NjgxIDE3LjYzNjQgMTIuOTU2NSAxNy42MzY0QzE2LjA 3MjUgMTcuNjM2NCAxOC41NzI1IDE1LjEyNzMgMTguNTcyNSAxMkMxOC41NzI1IDguODcyNzMgMTYuMDcyNSA 2LjM2MzY0IDEyLjk1NjUgNi4zNjM2NEM5Ljg3NjgxIDYuMzYzNj QgNy4zNDA1OCA4Ljg3MjczIDcuMzQwNTggMTJaIiBmaWxsPSIjQUFBNTlGIi8+PHBhdGggZD0iTTcgMTdIMFYyN Eg3VjE3WiIgZmlsbD0iIzU3NTc1NyIvPjwvc3ZnPg==) no-repeat center;
+        background-size: contain;
+    }
+
+    #notification>a:hover:before,
+    #notification._show>a:before {
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNiAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBma WxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZC IgZD0iTTI2IDBIMTguNzUzNlYxLjQ5MzM5QzE3LjAzNyAwLjU0MTk1NSAxNS4wNjA2IDAgMTIuOTU2NSAwQz YuMzYyMzIgMCAxIDUuMzgxODIgMSAxMkMxIDE4LjYxODIgNi4zNjIzMiAyNCAxMi45NTY1IDI0QzE1LjA1ODc gMjQgMTcuMDM1NyAyMy40NTMxIDE4Ljc1MzYgMjIuNDkzNVY yNEgyNlYwWk03LjM0MDU4IDEyQzcuMzQwNTggMTUuMTI3MyA5Ljg3NjgxIDE3LjYzNjQgMTIuOTU2NSAxNy 42MzY0QzE2LjA3MjUgMTcuNjM2NCAxOC41NzI1IDE1LjEyNzMgMTguNTcyNSAxMkMxOC41NzI1IDguODcyN zMgMTYuMDcyNSA2LjM2MzY0IDEyLjk1NjUgNi4zNjM2NEM5L jg3NjgxIDYuMzYzNjQgNy4zNDA1OCA4Ljg3MjczIDcuMzQwNTggMTJaIiBmaWxsPSIjRkNGQ0ZDIi8+PHBhdG ggZD0iTTcgMTdIMFYyNEg3VjE3WiIgZmlsbD0iIzU3NTc1NyIvPjwvc3ZnPg==) no-repeat center;
+        background-size: contain;
+    }
+</style>
