@@ -1,0 +1,121 @@
+<?php
+$notificationCollection = $block->getListNotification();
+$markAsReadUrl = '/blog/notification/markasread';
+
+$isLogged = $this->helper('Practice\Blog\Helper\CustomerLogin')->checkIsLoggedIn();
+if ($isLogged == true) {
+    $isLogged = 'true';
+} else {
+    $isLogged = 'false';
+}
+
+$loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yLnRlc3Q6ODEvYmxvZy9zaG93L2luZGV4L2lkLzEv/');
+
+?>
+
+
+<form id="notificationForm">
+
+    <?php if ($notificationCollection && count($notificationCollection->getData()) > 0) : ?>
+        <div class="table-wrapper orders-history">
+            <table class="data table table-order-items history" id="my-orders-table">
+                <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="col id"><?php echo __('ID') ?></th>
+
+                        <th scope="col" class="col title"><?php echo __('Title') ?></th>
+                        <th scope="col" class="col title"><?php echo __('Description') ?></th>
+
+                        <th scope="col" class="col date"><?php echo __('Date') ?></th>
+                        <!-- <th scope="col" class="col ">Action</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                    $i = 1;
+                    foreach ($notificationCollection as $notification) :
+                    ?>
+                        <tr>
+                            <td class="col id">
+                                <?php
+                                echo $i;
+                                $i++;
+
+                                ?>
+                                <input type="hidden" name="id[]" value="<?= $notification->getBlogNotificationId() ?>">
+                            </td>
+
+                            <td class="col shipping"><?php echo $notification->getTitle() ?></td>
+                            <td class="col shipping"><?php echo $notification->getDescription() ?></td>
+                            <td class="col date"><?php echo date('d/m/Y H:i', strtotime($notification->getCreatedAt())) ?></td>
+                            <!-- <td><a href="">Mark as read</a></td> -->
+
+                        </tr>
+                    <?php endforeach; ?>
+
+
+                </tbody>
+                <tfoot>
+                    <div style="display:flex; justify-content:center;">
+                        <th></th>
+                        <th scope="col" class="col ">
+                            <button type="submit">Mark all as read</button>
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </div>
+
+                </tfoot>
+            </table>
+        </div>
+
+</form>
+
+<?php endif ?>
+
+
+<script type="text/javascript">
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($) {
+        $(document).ready(function() {
+
+            $('#notificationForm').mage(
+                'validation', {
+                    submitHandler: function(form) {
+                        var markAsReadUrl = "<?php echo $markAsReadUrl ?>";
+                        var isLogged = "<?= $isLogged ?>";
+                        console.log(isLogged);
+                        if (isLogged == 'false') {
+                            window.location.href = "<?= $loginUrl ?>";
+                        } else {
+                            var data = $('#notificationForm').serialize();
+                            $.ajax({
+                                url: markAsReadUrl,
+                                data: data,
+                                type: 'POST',
+                                dataType: 'json',
+                                showLoader: true,
+                                cache: false,
+                                success: function(data, status, xhr) {
+                                   $('#notificationForm').remove();
+                                   $('.message').remove();
+                                   $('#maincontent').prepend(' <div class="message success empty"><span><?php echo __('Successfully!!'); ?></span></div>');
+                                },
+                                error: function(xhr, status, errorThrown) {
+                                    console.log('Error happens. Try again.');
+                                    console.log(errorThrown);
+                                }
+                            });
+                        }
+
+                    }
+
+                }
+            );
+        });
+    });
+</script>
