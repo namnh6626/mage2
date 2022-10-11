@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="blog_content" translate="label,description" instance="Practice\Blog\Model\Cache\Type">
+        <label>Blog Content</label>
+        <description>Cache Type Blog content</description>
+    </type>
+</config>
