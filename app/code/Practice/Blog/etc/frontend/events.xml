@@ -3,4 +3,10 @@
     <event name="customer_comment_success">
         <observer name="email_customer_comment" instance="Practice\Blog\Observer\CustomerCommentObserver"/>
     </event>
+    <event name="comment_approved">
+        <observer name="comment_approved_notification" instance="Practice\Blog\Observer\CommentApprovedNotification"/>
+    </event>
+    <event name="invalidate_page">
+        <observer name="cache_invalidator" instance="Practice\Blog\Observer\CacheInvalidator"/>
+    </event>
 </config>
