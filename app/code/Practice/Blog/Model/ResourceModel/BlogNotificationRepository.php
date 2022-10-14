@@ -7,9 +7,11 @@ use Practice\Blog\Api\Data\BlogNotificationInterface;
 use Practice\Blog\Model\ResourceModel\BlogNotification\CollectionFactory as BlogNotificationCollectionFactory;
 use Practice\Blog\Model\BlogNotificationFactory;
 use Practice\Blog\Model\ResourceModel\BlogNotification as BlogNotificationResource;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\PageCache\Model\Cache\Type as CacheType;
 
 
-class BlogNotificationRepository implements BlogNotificationRepositoryInterface
+class BlogNotificationRepository implements BlogNotificationRepositoryInterface, IdentityInterface
 {
     protected $blogNotificationCollectionFactory;
     protected $blogNotificationFactory;
@@ -45,12 +47,6 @@ class BlogNotificationRepository implements BlogNotificationRepositoryInterface
     public function update(BlogNotificationInterface $blogNotificationInterface, $blog)
     {
 
-        // $blog->setTitle($blogInterface->getTitle());
-        // $blog->setContent($blogInterface->getContent());
-        // $blog->setBlogAvatarLink($blogInterface->getBlogAvatarLink());
-        // $blog->setUserId($blogInterface->getUserId());
-
-        // $this->blogResource->save($blog);
     }
 
 
@@ -69,8 +65,30 @@ class BlogNotificationRepository implements BlogNotificationRepositoryInterface
                 'customer_table.entity_id = comment_table.customer_id',
                 ['']
             )
-            ->where('customer_table.entity_id = ' . $customerId);
+            ->where('customer_table.entity_id = ' . $customerId)
+            ->where('main_table.is_read = 0');
 
          return $collection;
+    }
+
+    public function getById($blogNotificationId)
+    {
+        $blogNotification = $this->blogNotificationFactory->create();
+        $this->blogNotificationResource->load($blogNotification, $blogNotificationId);
+        // var_dump($blogNotification);
+        // die();
+        return $blogNotification;
+    }
+
+
+    public function markAsRead(BlogNotificationInterface $blogNotificationInterface, $blogNotification){
+        $blogNotification->setIsRead(1);
+        $this->blogNotificationResource->save($blogNotification);
+    }
+
+    public function getIdentities()
+    {
+        return [CacheType::TYPE_IDENTIFIER];
+
     }
 }
