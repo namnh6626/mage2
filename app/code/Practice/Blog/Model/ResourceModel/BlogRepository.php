@@ -2,37 +2,27 @@
 
 namespace Practice\Blog\Model\ResourceModel;
 
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Practice\Blog\Api\BlogRepositoryInterface;
 use Practice\Blog\Api\Data\BlogInterface;
 use Practice\Blog\Model\BlogFactory;
-use Practice\Blog\Model\Blog;
-
 use Practice\Blog\Model\ResourceModel\Blog as BlogResource;
 use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory as BlogCollectionFactory;
 use Practice\Blog\Model\ResourceModel\BlogCategory\CollectionFactory as BlogCategoryCollectionFactory;
 use Practice\Blog\Model\ResourceModel\Comment\CollectionFactory as CommentCollectionFactory;
 use Practice\Blog\Constant\Constant;
-use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\PageCache\Model\Cache\Type as CacheType;
+use Magento\Framework\App\RequestInterface;
 
-class BlogRepository implements BlogRepositoryInterface
+class BlogRepository implements BlogRepositoryInterface, IdentityInterface
 {
     protected $blogFactory;
     protected $blogResource;
     protected $blogCollectionFactory;
-    protected $filterBuilder;
-    protected $blogRepositoryInterface;
-    protected $searchCriteriaBuilder;
     protected $blogCategoryCollectionFactory;
     protected $commentCollectionFactory;
-    protected $searchResultsFactory;
-    protected $collectionProcessor;
-    protected $blog;
-
+    protected $blogInterface;
+    protected $request;
 
     public function __construct(
         BlogFactory $blogFactory,
@@ -40,21 +30,17 @@ class BlogRepository implements BlogRepositoryInterface
         BlogResource $blogResource,
         BlogCategoryCollectionFactory $blogCategoryCollectionFactory,
         CommentCollectionFactory $commentCollectionFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        SearchResultFactory $searchResultsFactory,
-        CollectionProcessor $collectionProcessor,
-        Blog $blog
+        BlogInterface $blogInterface,
+        RequestInterface $request
 
     ) {
+        $this->request = $request;
         $this->blogFactory = $blogFactory;
         $this->blogResource = $blogResource;
         $this->blogCollectionFactory = $blogCollectionFactory;
         $this->blogCategoryCollectionFactory = $blogCategoryCollectionFactory;
         $this->commentCollectionFactory = $commentCollectionFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->blog = $blog;
+        $this->blogInterface = $blogInterface;
     }
 
     public function save(BlogInterface $blogInterface)
@@ -71,15 +57,14 @@ class BlogRepository implements BlogRepositoryInterface
         $blogInterface->setBlogEntityId($blog->getBlogEntityId());
     }
 
-    public function update(BlogInterface $blogInterface, $blog){
-
+    public function update(BlogInterface $blogInterface, $blog)
+    {
         $blog->setTitle($blogInterface->getTitle());
         $blog->setContent($blogInterface->getContent());
         $blog->setBlogAvatarLink($blogInterface->getBlogAvatarLink());
         $blog->setUserId($blogInterface->getUserId());
 
         $this->blogResource->save($blog);
-
     }
 
     public function getById($blogId)
@@ -89,17 +74,13 @@ class BlogRepository implements BlogRepositoryInterface
         return $blog;
     }
 
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getIdentities()
     {
+        return [CacheType::TYPE_IDENTIFIER];
+    }
 
-        // $searchResult = $this->searchResultsFactory->create();
-        // $this->collectionProcessor->process($searchCriteria, $collection);
-        // $searchResult->setItems($collection->getItems());
-        // $searchResult->setTotalCount($collection->getSize());
-
-        // var_dump(($collection->getData()));
-
-        // die();
+    public function getList(BlogInterface $blogInterface)
+    {
         $collection = $this->blogCollectionFactory->create();
         return $collection;
     }
@@ -107,7 +88,9 @@ class BlogRepository implements BlogRepositoryInterface
     public function getBlogContentById($blogId)
     {
         $collection = $this->blogCollectionFactory->create();
-        $collection->getSelect()->joinLeft(['user_table' => $collection->getTable('admin_user')], 'user_table.user_id = main_table.user_id', ['*'])
+        $collection
+            ->getSelect()
+            ->joinLeft(['user_table' => $collection->getTable('admin_user')], 'user_table.user_id = main_table.user_id', ['*'])
             ->where('main_table.blog_entity_id = ' . $blogId);
         return $collection;
     }
@@ -157,9 +140,8 @@ class BlogRepository implements BlogRepositoryInterface
             ->where('main_table.blog_entity_id = ' . $blogId)
 
             ->order('created_at DESC');
-        // echo $collection->getSelect();
-        // die();
 
         return $collection;
     }
+
 }
