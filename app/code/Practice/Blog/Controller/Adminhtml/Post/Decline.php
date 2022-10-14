@@ -11,6 +11,7 @@ use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Psr\Log\LoggerInterface;
 use Practice\Blog\Constant\Constant;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
 
 class Decline extends Action
 {
@@ -18,13 +19,21 @@ class Decline extends Action
     protected $blogCollectionFactory;
     protected $filter;
     protected $logger;
+    protected $blogRepository;
 
-    public function __construct(Context $context, PageFactory $pageFactory, CollectionFactory $blogCollectionFactory, Filter $filter, LoggerInterface $logger)
-    {
+    public function __construct(
+        Context $context,
+        PageFactory $pageFactory,
+        CollectionFactory $blogCollectionFactory,
+        Filter $filter,
+        LoggerInterface $logger,
+        BlogRepository $blogRepository
+    ) {
         $this->logger = $logger;
         $this->filter = $filter;
         $this->blogCollectionFactory = $blogCollectionFactory;
         $this->pageFactory = $pageFactory;
+        $this->blogRepository = $blogRepository;
         parent::__construct($context);
     }
 
@@ -39,6 +48,10 @@ class Decline extends Action
             }
 
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            $typeCacheCode = $this->blogRepository->getIdentities();
+
+            $this->_eventManager->dispatch('invalidate_page', ['type_code'=>$typeCacheCode]);
+
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
         }

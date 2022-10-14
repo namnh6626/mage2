@@ -18,6 +18,8 @@ class Add extends Action
 
     public function execute()
     {
+        $this->_eventManager->dispatch('invalidate_page', $this->blogRepository->getIdentities());
+
         return $this->pageFactory->create();
     }
 }

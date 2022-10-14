@@ -5,19 +5,31 @@ namespace Practice\Blog\Controller\Show;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
 
-class Index extends Action{
+
+class Index extends Action
+{
     protected $pageFactory;
+    protected $blogRepository;
 
-    public function __construct(Context $context, PageFactory $pageFactory)
-    {
-        $this->pageFactory = $pageFactory;
+
+    public function __construct(
+        Context $context,
+        PageFactory $pageFactory,
+        BlogRepository $blogRepository
+    ) {
         parent::__construct($context);
+
+        $this->pageFactory = $pageFactory;
+        $this->blogRepository = $blogRepository;
+
     }
 
     public function execute()
     {
-        return $this->pageFactory->create();
-    }
+        $page = $this->pageFactory->create();
 
+        return $page;
+    }
 }

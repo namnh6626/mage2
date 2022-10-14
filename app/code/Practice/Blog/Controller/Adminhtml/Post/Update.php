@@ -53,36 +53,37 @@ class Update extends Action
         $blogAvatar = $params['blog_avatar_link'];
         $blogId = $params['blog_entity_id'];
 
-        // $blog = $this->blog->load($blogId, 'blog_entity_id');
-
         $blog = $this->blogRepository->getById($blogId);
-
-        // $blog->setData('title', $blogTitle);
-        // $blog->setData('content', $blogContent);
-        // $blog->setData('blog_avatar_link', $blogAvatar);
-        // $blog->setData('user_id', $this->authSession->getUser()->getId());
-        // $blog->save();
 
         $this->blogInterface->setTitle($blogTitle);
         $this->blogInterface->setContent($blogContent);
         $this->blogInterface->setBlogAvatarLink($blogAvatar);
         $this->blogInterface->setUserId($this->authSession->getUser()->getId());
 
-        $this->blogRepository->update($this->blogInterface, $blog);
+        try {
+            $this->blogRepository->update($this->blogInterface, $blog);
 
-        $connection = $this->resourceConnection->getConnection();
-        if (count($blogCategories) > 0) {
+            $connection = $this->resourceConnection->getConnection();
+            if (count($blogCategories) > 0) {
 
-            $sql = "DELETE FROM blog_category_value WHERE blog_entity_id = ${blogId}";
-
-            $connection->query($sql);
-
-            foreach ($blogCategories as $category) {
-
-                $sql = "INSERT INTO blog_category_value (blog_entity_id, blog_category_id) VALUES (${blogId}, ${category})";
+                $sql = "DELETE FROM blog_category_value WHERE blog_entity_id = ${blogId}";
 
                 $connection->query($sql);
+
+                foreach ($blogCategories as $category) {
+
+                    $sql = "INSERT INTO blog_category_value (blog_entity_id, blog_category_id) VALUES (${blogId}, ${category})";
+
+                    $connection->query($sql);
+                }
             }
+
+            $typeCacheCode = $this->blogRepository->getIdentities();
+
+            $this->_eventManager->dispatch('invalidate_page', ['type_code'=>$typeCacheCode]);
+
+        } catch (\Exception $e) {
+
         }
         return $this->_redirect('blog/post');
     }

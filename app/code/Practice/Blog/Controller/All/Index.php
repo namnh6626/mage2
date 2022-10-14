@@ -43,7 +43,7 @@ class Index extends Action
         //     $blogElement->unsetData();
         // }
 
-
+        // $this->_eventManager->dispatch('comment_approved',['layout'=>'default']);
 
 
         return ($this->pageFactory->create());

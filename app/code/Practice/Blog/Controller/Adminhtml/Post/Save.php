@@ -11,6 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Backend\Model\Auth\Session;
 use Practice\Blog\Model\ResourceModel\BlogRepository;
 use Practice\Blog\Api\Data\BlogInterface;
+use Magento\Framework\Message\ManagerInterface;
+
+
 
 
 class Save extends Action
@@ -22,7 +25,6 @@ class Save extends Action
     protected $blogRepository;
     protected $blogInterface;
 
-
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
@@ -30,19 +32,24 @@ class Save extends Action
         ResourceConnection $resourceConnection,
         Session $authSession,
         BlogRepository $blogRepository,
-        BlogInterface $blogInterface
-
+        BlogInterface $blogInterface,
+        ManagerInterface $messageManagerInterface
     ) {
+        parent::__construct($context);
         $this->blog = $blog;
         $this->pageFactory = $pageFactory;
         $this->resourceConnection = $resourceConnection;
         $this->authSession = $authSession;
         $this->blogRepository = $blogRepository;
         $this->blogInterface = $blogInterface;
-
-        parent::__construct($context);
+        $this->messageManagerInterface = $messageManagerInterface;
     }
 
+    /**
+     * execute
+     *
+     * @return void
+     */
     public function execute()
     {
         $params = $this->getRequest()->getParams();
@@ -56,32 +63,35 @@ class Save extends Action
         }
         $blogAvatar = $params['blog_avatar_link'];
 
-        // $blog = $this->blog;
-        // $blog->setData('title', $blogTitle);
-        // $blog->setData('content', $blogContent);
-        // $blog->setData('blog_avatar_link', $blogAvatar);
-        // $blog->setData('user_id', $this->authSession->getUser()->getId());
-        // $blog->save();
+        try {
+            $this->blogInterface->setTitle($blogTitle);
+            $this->blogInterface->setContent($blogContent);
+            $this->blogInterface->setBlogAvatarLink($blogAvatar);
+            $this->blogInterface->setUserId($this->authSession->getUser()->getId());
+            $this->blogInterface->setBlogStatusId(Constant::APPROVED_STATUS_ID);
 
+            $this->blogRepository->save($this->blogInterface);
 
-        $this->blogInterface->setTitle($blogTitle);
-        $this->blogInterface->setContent($blogContent);
-        $this->blogInterface->setBlogAvatarLink($blogAvatar);
-        $this->blogInterface->setUserId($this->authSession->getUser()->getId());
-        $this->blogRepository->save($this->blogInterface);
+            $blogId = $this->blogInterface->getBlogEntityId();
 
-        $blogId = $this->blogInterface->getBlogEntityId();
+            $connection = $this->resourceConnection->getConnection();
+            if(count($blogCategories) > 0){
+                foreach ($blogCategories as $category) {
 
-        $connection = $this->resourceConnection->getConnection();
-        if(count($blogCategories) > 0){
-            foreach ($blogCategories as $category) {
+                    $sql = "INSERT INTO blog_category_value (blog_entity_id, blog_category_id) VALUES (${blogId}, ${category})";
 
-                $sql = "INSERT INTO blog_category_value (blog_entity_id, blog_category_id) VALUES (${blogId}, ${category})";
-
-                $connection->query($sql);
+                    $connection->query($sql);
+                }
             }
+            $this->messageManagerInterface->addSuccessMessage('Add Blog successfully');
+        } catch (\Exception $e) {
+
+            $this->messageManagerInterface->addErrorMessage('Add Blog failed');
 
         }
+
         return $this->_redirect('blog/post');
     }
+
+
 }

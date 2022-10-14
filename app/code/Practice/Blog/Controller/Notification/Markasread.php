@@ -14,7 +14,6 @@ use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 
-
 class Markasread extends Action implements CsrfAwareActionInterface
 {
     protected $pageFactory;
@@ -22,6 +21,7 @@ class Markasread extends Action implements CsrfAwareActionInterface
     protected $blogNotificationRepository;
     protected $loggerInterface;
     protected $jsonFactory;
+
 
     public function __construct(
         Context $context,
@@ -62,18 +62,23 @@ class Markasread extends Action implements CsrfAwareActionInterface
     {
         $notificationIds = $this->getRequest()->getParam('id');
 
-        try{
+        try {
             $resultJsonFactory = $this->jsonFactory->create();
 
-            foreach($notificationIds as $notificationId){
+            foreach ($notificationIds as $notificationId) {
                 $blogNotification = $this->blogNotificationRepository->getById($notificationId);
                 $this->blogNotificationRepository->markAsRead($this->blogNotificationInterface, $blogNotification);
             }
             $resultJsonFactory->setData($notificationIds);
 
-        }catch(\Exception $e){
+            $typeCacheCode = $this->blogNotificationRepository->getIdentities();
+
+            $this->_eventManager->dispatch('invalidate_page', ['type_code' => $typeCacheCode]);
+        } catch (\Exception $e) {
             $this->loggerInterface->critical($e->getMessage());
         }
+
+
 
         return $resultJsonFactory;
     }

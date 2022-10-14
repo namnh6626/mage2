@@ -7,12 +7,15 @@ use Magento\Framework\App\Action\Context;
 use Psr\Log\LoggerInterface;
 use Practice\Blog\Model\Comment;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\SessionFactory;
 use Practice\Blog\Constant\Constant;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Phrase;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
 
-
-
-class Save extends Action
+class Save extends Action implements CsrfAwareActionInterface
 {
     protected $pageFactory;
     protected $jsonFactory;
@@ -21,56 +24,80 @@ class Save extends Action
     protected $customerSession;
     protected $customerLogin;
     protected $urlInterface;
-
+    protected $messageManagerInterface;
+    protected $blogRepository;
 
     public function __construct(
         Context $context,
         LoggerInterface $logger,
         Comment $comment,
         JsonFactory $jsonFactory,
-        Session $customerSession
+        SessionFactory $customerSession,
+        BlogRepository $blogRepository
     ) {
         $this->jsonFactory = $jsonFactory;
         $this->comment = $comment;
         $this->logger = $logger;
         $this->customerSession = $customerSession;
+        $this->blogRepository = $blogRepository;
 
         parent::__construct($context);
     }
 
     public function execute()
     {
+        $customerSession = $this->customerSession->create();
         $commentContent = $this->getRequest()->getParam('content');
-        $customerId = $this->customerSession->getCustomer()->getId();
+        $blogId = $this->getRequest()->getParam('blog_id');
+        $customerId = $customerSession->getId();
         try {
             $createdAt = date('Y-m-d H:i:s', time());
 
             $resultJsonFactory = $this->jsonFactory->create();
             $comment = $this->comment;
             $comment->setData('content', $commentContent);
-            $comment->setData('blog_entity_id', 1);
-            $comment->setData('comment_status_id', 2);
+            $comment->setData('blog_entity_id', $blogId);
+            $comment->setData('comment_status_id', Constant::PENDING_STATUS_ID);
             $comment->setData('customer_id', $customerId);
             $comment->setData('created_at', $createdAt);
             $comment->save();
 
-            $comment->setData('firstname', strval($this->customerSession->getCustomer()->getFirstname()));
-            $comment->setData('middlename', strval($this->customerSession->getCustomer()->getMiddlename()));
-            $comment->setData('lastname', strval($this->customerSession->getCustomer()->getLastname()));
-            $comment->setData('email', $this->customerSession->getCustomer()->getEmail());
-            $comment->setData('created_at', date('d/m/Y H:i:s', strtotime($createdAt)));
+            $comment->setData('firstname', strval($customerSession->getCustomer()->getFirstname()));
+            $comment->setData('middlename', strval($customerSession->getCustomer()->getMiddlename()));
+            $comment->setData('lastname', strval($customerSession->getCustomer()->getLastname()));
+            $comment->setData('email', $customerSession->getCustomer()->getEmail());
+            $comment->setData('created_at', date('d/m/Y H:i', strtotime($createdAt)));
 
             $resultJsonFactory->setData($comment->getData());
+
+            $typeCacheCode = $this->blogRepository->getIdentities();
+
+            $this->_eventManager->dispatch('invalidate_page', ['type_code'=>$typeCacheCode]);
+            $this->_eventManager->dispatch('customer_comment_success');
+
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
 
-        $senderName = Constant::EMAIL_SENDER_COMMENT_SUCCESS;
-        $senderEmail = Constant::NAME_SENDER_COMMENT_SUCCESS;
-        $addToEmail = $this->customerSession->getCustomer()->getEmail();
-
-        $this->_eventManager->dispatch('customer_comment_success');
 
         return $resultJsonFactory;
+    }
+
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return new InvalidRequestException(
+            $this->response,
+            [new Phrase($this->message)]
+        );
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
+    protected function _isAllowed()
+    {
+        return true;
     }
 }

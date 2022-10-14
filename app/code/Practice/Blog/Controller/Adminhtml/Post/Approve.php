@@ -10,6 +10,7 @@ use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Psr\Log\LoggerInterface;
 use Practice\Blog\Constant\Constant;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
 
 class Approve extends Action
 {
@@ -17,13 +18,21 @@ class Approve extends Action
     protected $blogCollectionFactory;
     protected $filter;
     protected $logger;
+    protected $blogRepository;
 
-    public function __construct(Context $context, PageFactory $pageFactory, CollectionFactory $blogCollectionFactory, Filter $filter, LoggerInterface $logger)
-    {
+    public function __construct(
+        Context $context,
+        PageFactory $pageFactory,
+        CollectionFactory $blogCollectionFactory,
+        Filter $filter,
+        LoggerInterface $logger,
+        BlogRepository $blogRepository
+    ) {
         $this->logger = $logger;
         $this->filter = $filter;
         $this->blogCollectionFactory = $blogCollectionFactory;
         $this->pageFactory = $pageFactory;
+        $this->blogRepository = $blogRepository;
         parent::__construct($context);
     }
 
@@ -36,11 +45,15 @@ class Approve extends Action
                 $blog->setData('blog_status_id', Constant::APPROVED_STATUS_ID);
                 $blog->save();
             }
+            $typeCacheCode = $this->blogRepository->getIdentities();
+
+            $this->_eventManager->dispatch('invalidate_page', ['type_code' => $typeCacheCode]);
 
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
-        return $this->_redirect($this->_redirect->getRefererUrl());
 
+
+        return $this->_redirect($this->_redirect->getRefererUrl());
     }
 }
