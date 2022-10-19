@@ -1,6 +1,17 @@
-
 <div class="practice-custom-section" data-bind="scope: 'section'">
-	<p data-bind="text: customsection().customdata"></p>
+    <!-- <div data-bind="foreach : customsection().customdata">
+        <p data-bind="text: title"></p>
+        <p data-bind="text: des"></p>
+    </div> -->
+	<p data-bind="text: customsection().data.title"></p>
+</div>
+
+<div class="practice-custom-section" data-bind="scope: 'cus_section'">
+    <!-- <div data-bind="foreach : customsection().customdata">
+        <p data-bind="text: title"></p>
+        <p data-bind="text: des"></p>
+    </div> -->
+	<p data-bind="text: custominfo().data"></p>
 </div>
 <script type="text/x-magento-init">
 	{
@@ -9,6 +20,9 @@
             	"components": {
                 	"section": {
                     	"component": "Practice_Blog/js/section"
+                	},
+                    "cus_section": {
+                    	"component": "Practice_Blog/js/cus_section"
                 	}
             	}
         	}

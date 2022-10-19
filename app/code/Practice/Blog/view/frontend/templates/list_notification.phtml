@@ -2,12 +2,8 @@
 $notificationCollection = $block->getListNotification();
 $markAsReadUrl = '/blog/notification/markasread';
 
-$isLogged = $this->helper('Practice\Blog\Helper\CustomerLogin')->checkIsLoggedIn();
-if ($isLogged == true) {
-    $isLogged = 'true';
-} else {
-    $isLogged = 'false';
-}
+$isLogged = $block->checkIsLogin();
+
 
 $loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yLnRlc3Q6ODEvYmxvZy9zaG93L2luZGV4L2lkLzEv/');
 
@@ -106,8 +102,7 @@ $loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yL
                                    $('#maincontent').prepend(' <div class="message success empty"><span><?php echo __('Successfully!!'); ?></span></div>');
                                 },
                                 error: function(xhr, status, errorThrown) {
-                                    console.log('Error happens. Try again.');
-                                    console.log(errorThrown);
+
                                 }
                             });
                         }

@@ -1,40 +1,20 @@
 <?php
 $getFeaturedPostUrl = $block->getUrl('*/post/featured');
-
 ?>
-<div>
+<div class="container padding-30">
     <h3>Featured Posts</h3>
     <div id="list-featured-post">
 
     </div>
 </div>
 
-<script>
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($) {
-        $(document).ready(function() {
-            $.ajax({
-                url: "<?= $getFeaturedPostUrl ?>",
-                type: 'GET',
-                dataType: 'json',
-                // showLoader: true,
-                cache: false,
-                success: function(data, _status) {
-                    for (key in data) {
-                        $('#list-featured-post').append(
-                          `<div class="featured-blog">
-                              <a href="${data[key].blog_entity_id}">${data[key].title}</a>
-                          </div>`
-                        )
-                    }
 
-                },
-                error: function(_xhr, _status, errorThrown) {
 
-                }
-            });
-        });
-    });
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Practice_Blog/js/featured" : {
+            }
+        }
+    }
 </script>

@@ -1,113 +1,66 @@
 <a href="http://magento2.test:81/blog/all">All Blog</a>
 <?php
+
+($block->getIdentities());
 $blogComments = $block->getBlogComments();
-$blogContentCollection = $block->getBlogContent();
+$blogCollection = $block->getBlogContent();
 $blogCategories = $block->getBlogCategory();
 // var_dump($blogComments->getData());
 // die();
-$blogId;
+$blogId = 0;
 $saveCommentUrl = $block->getUrl('*/comment/save');
 $loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yLnRlc3Q6ODEvYmxvZy9zaG93L2luZGV4L2lkLzEv/');
 
-$isLogged = $this->helper('Practice\Blog\Helper\CustomerLogin')->checkIsLoggedIn();
-if ($isLogged == true) {
-    $isLogged = 'true';
-} else {
-    $isLogged = 'false';
-}
+$isLogged = $block->checkIsLogin();
+
 
 ?>
+<?php foreach ($blogCollection as $blogContent) : ?>
+    <div class="container">
+        <header class="blog-post-header">
+            <h2 class="title mb-2"><?= $blogContent->getTitle() ?></h2>
+            <div class="meta mb-3">
+                <strong>Author: <?= $blogContent->getFirstname() . ' ' . $blogContent->getLastname() ?></strong>
 
-<?php foreach ($blogContentCollection as $blogContent) : ?>
-    <h2><?= $blogContent->getTitle() ?></h2>
-    <strong>Author: <?= $blogContent->getFirstname() . ' ' . $blogContent->getLastname() ?></strong>
-    <br>
-    <span><?= date("d/m/Y H:i", strtotime($blogContent->getCreatedAt()));  ?></span>
+                <span class="date"><?= date("d/m/Y H:i", strtotime($blogContent->getCreatedAt()));  ?></span>
+            </div>
+        </header>
 
-
-    <p><?= $blogContent->getContent() ?></p>
-
-    <?php $blogId = $blogContent->getBlogEntityId(); ?>
+        <div class="blog-post-body">
+            <p><?= $blogContent->getContent() ?></p>
+        </div>
+    </div>
 <?php endforeach; ?>
+
+
 <?php foreach ($blogCategories as $category) : ?>
     <span><button><?= $category->getBlogCategoryName() ?></button></span>
 <?php endforeach; ?>
-<h2>Comments</h2>
 
-<form id="commentForm">
-    <input type="text" name="content" id="content" placeholder="Enter your comment">
-    <input type="hidden" name="customer_id" id="customer_id" value="2">
+<style>
+    input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
-    <input type="hidden" name="blog_id" id="blog_id" value="<?= $blogId ?>">
-    <br>
-    <button class="btn btn-submit" type="submit" id='btnSubmit'>Submit</button>
-</form>
+button[type=submit] {
+  width: 20%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-<div id="comments">
+button[type=submit]:hover {
+  background-color: #45a049;
+}
 
-    <?php foreach ($blogComments as $comment) : ?>
-        <div class="comment">
-            <b><?= $comment->getFirstname() . ' ' . $comment->getMiddlename() . ' ' . $comment->getLastname() ?></b>
-            <span><?= $comment->getEmail() ?></span>
-            <br>
-            <span><?= date("d/m/Y H:i", strtotime($comment->getCreatedAt())) ?></span>
-            <p><?= $comment->getContent() ?></p>
-            <br>
-        </div>
-        <?php ?>
-    <?php endforeach; ?>
-</div>
-
-
-<script type="text/javascript">
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($) {
-        $(document).ready(function() {
-
-            $('#commentForm').mage(
-                'validation', {
-                    submitHandler: function(form) {
-                        var saveCommentUrl = "<?php echo $saveCommentUrl ?>";
-                        var isLogged = "<?= $isLogged ?>";
-                        console.log(isLogged);
-                        if (isLogged == 'false') {
-                            window.location.href = "<?= $loginUrl ?>";
-                        } else {
-                            var data = $('#commentForm').serialize();
-                            $.ajax({
-                                url: saveCommentUrl,
-                                data: data,
-                                type: 'POST',
-                                dataType: 'json',
-                                showLoader: true,
-                                cache: false,
-                                success: function(data, status, xhr) {
-                                    $('#comments')
-                                        .prepend(
-                                            "<div class='comment'> <b>" + data.firstname + ' ' + data.middlename + ' ' + data.lastname + " </b>" +
-                                            "<span>" + data.email + "</span>" +
-                                            "<br>" +
-                                            "<span>" + data.created_at + "</span>" +
-                                            "<p>" + data.content + "</p>" +
-                                            "<br>" +
-                                            "</div>"
-                                        );
-
-                                    $("#commentForm").trigger('reset');
-                                },
-                                error: function(xhr, status, errorThrown) {
-                                    console.log('Error happens. Try again.');
-                                    console.log(errorThrown);
-                                }
-                            });
-                        }
-
-                    }
-
-                }
-            );
-        });
-    });
-</script>
+</style>
