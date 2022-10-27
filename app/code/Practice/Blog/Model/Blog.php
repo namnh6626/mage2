@@ -7,16 +7,22 @@ use Practice\Blog\Api\Data\BlogInterface;
 use Magento\Framework\Model\AbstractModel;
 use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory as BlogCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DataObject\IdentityInterface;
 
-class Blog extends AbstractModel implements BlogInterface
+class Blog extends AbstractModel implements BlogInterface, IdentityInterface
 {
+    const CACHE_TAG = 'blog_entity';
+
+    const CACHE_BLOG_CATEGORY_TAG = 'blog_b_c';
+
+    const CACHE_BLOG_COMMENT_TAG = 'blog_e_cmt_e';
 
     public function _construct()
     {
         $this->_init('\Practice\Blog\Model\ResourceModel\Blog');
     }
 
-    public function getBlogEntityId():int
+    public function getBlogEntityId()
     {
         return $this->_getData(self::BLOG_ENTITY_ID);
     }
@@ -46,7 +52,7 @@ class Blog extends AbstractModel implements BlogInterface
         return $this->setData(self::BLOG_CONTENT, $content);
     }
 
-    public function getUserId():int
+    public function getUserId(): int
     {
         return $this->_getData(self::BLOG_USER_ID);
     }
@@ -66,5 +72,41 @@ class Blog extends AbstractModel implements BlogInterface
         return $this->setData(self::BLOG_AVATAR, $link);
     }
 
+    public function getBlogStatusId()
+    {
+        return $this->_getData(self::BLOG_STATUS_ID);
+    }
 
+    public function setBlogStatusId($statusId)
+    {
+        return $this->setData(self::BLOG_STATUS_ID, $statusId);
+    }
+
+    public function getIdentities()
+    {
+        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+
+        // $isStatusChanged = $this->getOrigData(self::STATUS) != $this->getData(self::STATUS) && !$this->isObjectNew();
+        // if ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED) {
+        //     if ($this->getIsChangedCategories()) {
+        //         $identities = array_merge(
+        //             $identities,
+        //             $this->getProductCategoryIdentities($this->getAffectedCategoryIds())
+        //         );
+        //     }
+
+        //     if ($isStatusChanged || $this->isStockStatusChanged()) {
+        //         $identities = array_merge(
+        //             $identities,
+        //             $this->getProductCategoryIdentities($this->getCategoryIds())
+        //         );
+        //     }
+        // }
+
+        // if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
+        //     $identities[] = self::CACHE_TAG;
+        // }
+
+        return array_unique($identities);
+    }
 }
