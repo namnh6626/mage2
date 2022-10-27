@@ -9,8 +9,8 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\PageCache\Model\Cache\Type as CacheType;
 use Practice\Blog\Helper\Cache;
 use Magento\Framework\App\RequestInterface;
-use Magento\PageCache\Model\Cache\Type;
 use Magento\Framework\App\Cache\Manager as CacheManager;
+
 
 class CacheInvalidator implements ObserverInterface
 {
@@ -41,11 +41,20 @@ class CacheInvalidator implements ObserverInterface
     public function execute(Observer $observer)
     {
         $typeCodes = $observer->getTypeCode();
-        // $typeCodes[] = 'show_blog_content_cache_1';
 
-        if ($this->config->isEnabled()) {
-            $this->cacheManager->clean($typeCodes);
 
+
+        if(is_array($typeCodes)){
+            // if ($this->config->isEnabled()) {
+            //     $this->cacheManager->clean($typeCodes);
+            // }
+
+            $this->cacheType->clean(\Zend_Cache::CLEANING_MODE_ALL, $typeCodes);
+
+            // $this->typeList->invalidate($typeCodes);
+
+        }else{
+            return;
         }
 
     }
