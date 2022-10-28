@@ -86,26 +86,7 @@ class Blog extends AbstractModel implements BlogInterface, IdentityInterface
     {
         $identities = [self::CACHE_TAG . '_' . $this->getId()];
 
-        // $isStatusChanged = $this->getOrigData(self::STATUS) != $this->getData(self::STATUS) && !$this->isObjectNew();
-        // if ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED) {
-        //     if ($this->getIsChangedCategories()) {
-        //         $identities = array_merge(
-        //             $identities,
-        //             $this->getProductCategoryIdentities($this->getAffectedCategoryIds())
-        //         );
-        //     }
-
-        //     if ($isStatusChanged || $this->isStockStatusChanged()) {
-        //         $identities = array_merge(
-        //             $identities,
-        //             $this->getProductCategoryIdentities($this->getCategoryIds())
-        //         );
-        //     }
-        // }
-
-        // if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
-        //     $identities[] = self::CACHE_TAG;
-        // }
+     
 
         return array_unique($identities);
     }
