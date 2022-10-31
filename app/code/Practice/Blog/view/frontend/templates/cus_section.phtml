@@ -1,19 +1,28 @@
-<div>
-    <span>Private Section</span>
+<h3>Cus section</h3>
+<div class="practice-custom-section" data-bind="scope: 'compareproducts'" data-role="compare">
+
+    <span class="counter" data-bind="text: compareproducts().countCaption"></span>
 </div>
-<div class="practice-custom-section" data-bind="scope: 'section'">
-	<p data-bind="text: customsection().data.title"></p>
+
+<div class="practice-custom-section" data-bind="scope: 'customsection'" data-role="section">
+
+    <div data-bind="foreach: customsection().data">
+        <a data-bind="attr: { href:  url }">
+            <span data-bind="text: title"></span>
+            <br>
+        </a>
+
+    </div>
 </div>
+
+
 <script type="text/x-magento-init">
-	{
-    	"*": {
-        	"Magento_Ui/js/core/app": {
-            	"components": {
-                	"section": {
-                    	"component": "Practice_Blog/js/section"
-                	}
-            	}
-        	}
-    	}
-	}
+    {
+        "[data-role=compare]": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+        },
+        "[data-role=section]": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+        }
+    }
 </script>
