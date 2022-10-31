@@ -1,18 +1,41 @@
 <?xml version="1.0"?>
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
     <body>
+
         <referenceContainer name="main" remove="true"/>
+
         <referenceContainer name="columns" remove="true"/>
 
         <referenceContainer name="main.content">
-            <block class="Practice\Blog\Block\BlogContent" name="blog_show_index" template="Practice_Blog::show_blog.phtml">
-                <!-- <arguments>
-                    <argument name="cache_tags" xsi:type="string">show_blog_content_cache</argument>
-                </arguments> -->
-            </block>
-            <block class="Practice\Blog\Block\FeaturedPost" name="list_featured_blog" template="Practice_Blog::featured_blog.phtml" after="blog_show_index"></block>
 
-            <block class="Practice\Blog\Block\BlogComment" name="blog_show_index_comment" template="Practice_Blog::blog_comment.phtml" after="list_featured_blog"></block>
+            <block class="Practice\Blog\Block\BlogContent" name="blog_show_index" template="Practice_Blog::show_blog.phtml"></block>
+
+            <!-- <block class="Practice\Blog\Block\FeaturedPost" name="list_featured_blog" template="Practice_Blog::featured_blog.phtml" after="list_blog_recently_comment"></block> -->
+
+            <block class="Practice\Blog\Block\RecentlyComment" name="practice_custom_section_t" after="blog_show_index" cacheable="false" template="Practice_Blog::custom_section.phtml">
+
+            </block>
+
+            <block class="Practice\Blog\Block\RecentlyComment" name="private_cus_section" template="Practice_Blog::cus_section.phtml" after="practice_custom_section_t">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="compareproducts" xsi:type="array">
+                                <item name="component" xsi:type="string">Practice_Blog/js/custom_section</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+
+            <block class="Practice\Blog\Block\BlogComment" name="blog_show_index_comment" template="Practice_Blog::blog_comment.phtml" after="-"></block>
+
+
         </referenceContainer>
+
+
     </body>
+
 </page>

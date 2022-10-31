@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="product.info.main">
-            <block class="Practice\Blog\Block\RecentlyComment" name="practice_custom_private_content" after="-" template="Practice_Blog::custom_section.phtml" ></block>
 
-         <block class="Practice\Blog\Block\BlogComment" name="private_cus_section_c_p" template="Practice_Blog::cus_section.phtml" after="practice_custom_private_content">
+        <referenceContainer name="content">
+            <block class="Practice\Blog\Block\RecentlyComment" name="practice_custom_section_compare" after="-" template="Practice_Blog::custom_section.phtml"></block>
+
+            <block class="Practice\Blog\Block\BlogComment" name="private_cus_section_e" template="Practice_Blog::cus_section.phtml" after="practice_custom_section_compare">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
-
                             <item name="compareproducts" xsi:type="array">
                                 <item name="component" xsi:type="string">Practice_Blog/js/custom_section</item>
                             </item>
@@ -16,11 +22,11 @@
                             <item name="customsection" xsi:type="array">
                                 <item name="component" xsi:type="string">Practice_Blog/js/custom_section</item>
                             </item>
-
                         </item>
                     </argument>
                 </arguments>
             </block>
+
         </referenceContainer>
     </body>
 </page>

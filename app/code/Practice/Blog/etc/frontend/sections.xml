@@ -1,10 +1,17 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
 
-        <!--section defined in di.xml -->
+    <!--section defined in di.xml -->
     <action name="blog/comment/save">
         <section name="custom_section"/>
         <section name="custom_info"/>
     </action>
+
+    <action name="customer/account/logout">
+        <section name="custom_section"/>
+        <section name="custom_info"/>
+    </action>
+
+
 
 </config>
