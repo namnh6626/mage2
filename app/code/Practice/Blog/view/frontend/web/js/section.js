@@ -1,6 +1,6 @@
 define([
-	'uiComponent',
-	'Magento_Customer/js/customer-data'
+    'uiComponent',
+    'Magento_Customer/js/customer-data',
 ], function (Component, customerData) {
 	'use strict';
 
