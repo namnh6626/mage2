@@ -10,7 +10,7 @@ interface BlogRepositoryInterface
 {
     public function save(BlogInterface $blogInterface);
 
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(BlogInterface $blogInterface);
 
     public function getBlogContentById($blogId);
 
