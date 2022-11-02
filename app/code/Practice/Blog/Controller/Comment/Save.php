@@ -70,7 +70,7 @@ class Save extends Action implements CsrfAwareActionInterface
 
             $resultJsonFactory->setData($comment->getData());
 
-            $typeCacheCode = $this->blogRepository->getIdentities();
+            $typeCacheCode = $this->comment->getIdentities();
 
             $this->_eventManager->dispatch('invalidate_page', ['type_code'=>$typeCacheCode]);
             $this->_eventManager->dispatch('customer_comment_success');
