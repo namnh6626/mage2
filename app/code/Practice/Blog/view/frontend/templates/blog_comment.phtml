@@ -6,6 +6,10 @@ $saveCommentUrl = $block->getUrl('*/comment/save');
 $loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yLnRlc3Q6ODEvYmxvZy9zaG93L2luZGV4L2lkLzEv/');
 
 $isLogged = $block->checkIsLogin();
+
+$commentApprovedId = $block->getApprovedStatusId();
+
+
 ?>
 <?php if ($blogId < 0 || count($blogComments->getData()) == 0) : ?>
     <h2>No such Blog</h2>
@@ -31,6 +35,9 @@ $isLogged = $block->checkIsLogin();
             <span><?= $comment->getEmail() ?></span>
             <br>
             <span><?= date("d/m/Y H:i", strtotime($comment->getCreatedAt())) ?></span>
+            <?php if($comment->getCommentStatusId() != $commentApprovedId) : ?>
+                <span>(Not yet approved)</span>
+                <?php endif; ?>
             <p><?= $comment->getContent() ?></p>
             <br>
         </div>
@@ -63,28 +70,27 @@ $isLogged = $block->checkIsLogin();
                                 showLoader: true,
                                 // cache: false,
                                 success: function(data, status, xhr) {
-                                    $('#comments').empty();
+                                    // $('#comments').empty();
 
-                                    for (var key in data) {
+                                    console.log(data);
+                                    console.log(data.middlename);
 
-                                        let middlename = data[key].middlename ? data[key].middlename : "";
-                                        let createdAt = new Date(data[key].created_at);
+                                        let middlename = data.middlename ? data.middlename : "";
+                                        let createdAt = new Date(data.created_at);
                                         let createdAtFormat = createdAt.getDate() + '/' + (createdAt.getMonth() + 1) + '/' + createdAt.getFullYear() +
                                             " " + createdAt.getHours() + ':' + createdAt.getMinutes();
 
                                         console.log(middlename);
-                                        $('#comments').append(
-                                            "<div class='comment'> <b>" + data[key].firstname + ' ' + middlename + ' ' + data[key].lastname + " </b>" +
-                                            "<span>" + data[key].email + "</span>" +
+                                        $('#comments').prepend(
+                                            "<div class='comment'> <b>" + data.firstname + ' ' + middlename + ' ' + data.lastname + " </b>" +
+                                            "<span>" + data.email + "</span>" +
                                             "<br>" +
                                             "<span>" + createdAtFormat + "</span>" +
-                                            "<p>" + data[key].content + "</p>" +
+                                            "<p>" + data.content + "</p>" +
                                             "<br>" +
                                             "</div>"
 
                                         );
-
-                                    }
 
                                     $("#commentForm").trigger('reset');
                                 },

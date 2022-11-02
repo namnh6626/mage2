@@ -1,0 +1,27 @@
+<h3>Blog recently commented</h3>
+<div class="practice-custom-section" data-bind="scope: 'section'">
+
+    <div data-bind="foreach: customsection().data">
+        <a data-bind="attr: { href:  url }">
+            <p data-bind="text: title"></p>
+        </a>
+
+    </div>
+    <p data-bind="text: customsection().data[1].title"></p>
+</div>
+
+<script type="text/x-magento-init">
+    {
+    	"*": {
+        	"Magento_Ui/js/core/app": {
+            	"components": {
+                	"section": {
+                    	"component": "Practice_Blog/js/section"
+                	}
+            	}
+        	}
+    	}
+
+
+	}
+</script>

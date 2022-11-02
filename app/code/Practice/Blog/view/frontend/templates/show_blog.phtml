@@ -11,6 +11,7 @@ $blogId = 0;
 $saveCommentUrl = $block->getUrl('*/comment/save');
 $loginUrl = $block->getUrl('customer/account/login/referer/aHR0cDovL21hZ2VudG8yLnRlc3Q6ODEvYmxvZy9zaG93L2luZGV4L2lkLzEv/');
 
+$countComment = $block->getCountApprovedComments();
 $isLogged = $block->checkIsLogin();
 
 
@@ -23,6 +24,7 @@ $isLogged = $block->checkIsLogin();
                 <strong>Author: <?= $blogContent->getFirstname() . ' ' . $blogContent->getLastname() ?></strong>
 
                 <span class="date"><?= date("d/m/Y H:i", strtotime($blogContent->getCreatedAt()));  ?></span>
+                <strong><?=$countComment ?></strong>
             </div>
         </header>
 
@@ -37,30 +39,3 @@ $isLogged = $block->checkIsLogin();
     <span><button><?= $category->getBlogCategoryName() ?></button></span>
 <?php endforeach; ?>
 
-<style>
-    input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-button[type=submit] {
-  width: 20%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button[type=submit]:hover {
-  background-color: #45a049;
-}
-
-</style>

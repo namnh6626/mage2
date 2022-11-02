@@ -1,0 +1,35 @@
+
+<?php
+$blogContentCollection = $block->showBlog();
+$blogCategories = $block->getBlogCategory();
+$blogComments = $block->getBlogComments();
+
+
+?>
+
+<?php foreach ($blogContentCollection as $blogContent) : ?>
+    <h2><?= $blogContent->getTitle() ?></h2>
+    <strong>Author: <?= $blogContent->getFirstname() . ' ' . $blogContent->getLastname() ?></strong>
+    <br>
+    <span><?= date("H:i d/m/Y", strtotime($blogContent->getCreatedAt()));  ?></span>
+
+
+    <p><?= $blogContent->getContent() ?></p>
+<?php endforeach; ?>
+<?php foreach ($blogCategories as $category) : ?>
+    <span><button ><?= $category->getBlogCategoryName() ?></button></span>
+<?php endforeach; ?>
+<h2>Comments</h2>
+
+<?php foreach ($blogComments as $comment) : ?>
+    <div>
+        <b><?= $comment->getFirstname() . ' ' . $comment->getMiddlename() . ' ' . $comment->getLastname() ?></b>
+        <span><?= $comment->getEmail() ?></span>
+        <br>
+        <span><?= date("H:i d/m/Y", strtotime($comment->getCreatedAt())) ?></span>
+        <p><?= $comment->getContent() ?></p>
+        <br>
+
+
+    </div>
+<?php endforeach; ?>
