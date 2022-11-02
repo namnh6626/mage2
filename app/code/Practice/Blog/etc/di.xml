@@ -9,15 +9,10 @@
     <preference for="Practice\Blog\Api\Data\BlogNotificationInterface" type="Practice\Blog\Model\BlogNotification" />
     <preference for="Practice\Blog\Api\BlogNotificationRepositoryInterface" type="Practice\Blog\Model\ResourceModel\BlogNotificationRepository" />
 
+    <preference for="Practice\Blog\Api\Data\CommentInterface" type="Practice\Blog\Model\Comment" />
+    <preference for="Practice\Blog\Api\CommentRepositoryInterface" type="Practice\Blog\Model\ResourceModel\CommentRepository" />
 
-    <!-- customer data section -->
-    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
-        <arguments>
-            <argument name="sectionSourceMap" xsi:type="array">
-                <item name="custom-name" xsi:type="string">Practice\Blog\CustomerData\CustomSection</item>
-            </argument>
-        </arguments>
-    </type>
+
 
     <!-- UI component data provider -->
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
