@@ -86,8 +86,6 @@ class Blog extends AbstractModel implements BlogInterface, IdentityInterface
     {
         $identities = [self::CACHE_TAG . '_' . $this->getId()];
 
-     
-
         return array_unique($identities);
     }
 }

@@ -14,7 +14,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\PageCache\Model\Cache\Type as CacheType;
 use Magento\Framework\App\RequestInterface;
 
-class BlogRepository implements BlogRepositoryInterface, IdentityInterface
+
+class BlogRepository implements BlogRepositoryInterface
 {
     protected $blogFactory;
     protected $blogResource;
@@ -74,10 +75,7 @@ class BlogRepository implements BlogRepositoryInterface, IdentityInterface
         return $blog;
     }
 
-    public function getIdentities()
-    {
-        return [CacheType::TYPE_IDENTIFIER];
-    }
+
 
     public function getList(BlogInterface $blogInterface)
     {
@@ -142,6 +140,38 @@ class BlogRepository implements BlogRepositoryInterface, IdentityInterface
             ->order('created_at DESC');
 
         return $collection;
+    }
+
+    public function getCountBlogApprovedComments($blogId)
+    {
+        $collection = $this->blogCollectionFactory->create();
+
+        $collection
+            ->addFieldToSelect([])
+            ->getSelect()
+            ->columns('count(comment_table.comment_entity_id) as count_comment')
+
+            ->joinLeft(
+                ['comment_table' => $collection->getTable('comment_entity')],
+                'comment_table.blog_entity_id = main_table.blog_entity_id',
+                ['']
+            )
+            ->where('comment_table.comment_status_id = '. Constant::APPROVED_STATUS_ID)
+            ->where('main_table.blog_entity_id = '.$blogId)
+            ->group('main_table.blog_entity_id');
+
+            return $collection->getData();
+    }
+
+    public function getBlogTitleById($blogId){
+        $collection = $this->blogCollectionFactory->create();
+
+        $collection
+            ->addFieldToSelect(['title'])
+            ->getSelect()
+            ->where('main_table.blog_entity_id = '. $blogId);
+            return $collection;
+
     }
 
 }
