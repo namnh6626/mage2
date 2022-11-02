@@ -8,7 +8,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Practice\Blog\Api\Data\BlogInterface;
 use Practice\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Practice\Blog\Constant\Constant;
-use Practice\Blog\Model\BlogRepository;
+use Practice\Blog\Model\ResourceModel\BlogRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class AllBlog extends Template

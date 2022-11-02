@@ -38,7 +38,6 @@ class BlogComment extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->comment->getIdentities();
-        // return [CacheType::TYPE_IDENTIFIER];
     }
 
     public function getBlogComment(){
@@ -50,7 +49,7 @@ class BlogComment extends Template implements IdentityInterface
 
         $comments = $this->commentRepository->getCommentsByBlogId($blogId, $customerId);
 
-        // var_dump($comments);
+        // var_dump($comments->getData());
         // die();
         return $comments;
     }
@@ -72,4 +71,6 @@ class BlogComment extends Template implements IdentityInterface
     public function getApprovedStatusId(){
         return Constant::APPROVED_STATUS_ID;
     }
+
+
 }

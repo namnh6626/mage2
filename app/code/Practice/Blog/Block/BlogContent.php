@@ -79,10 +79,17 @@ class BlogContent extends Template implements IdentityInterface
         return 'false';
     }
 
-    public function getCountApprovedComments(){
+    public function getCountApprovedComments()
+    {
         $blogId = $this->getRequest()->getParam(Constant::ID_PARAM);
 
-        $result = $this->blogRepository->getCountBlogApprovedComments($blogId);
+        $count = $this->blogRepository->getCountBlogApprovedComments($blogId)[0]['count_comment'];
+
+        if ($count < 1) {
+            $result = $count . ' comment';
+        } else {
+            $result = $count . ' comments';
+        }
         return $result;
         // var_dump($result->getData());
         // die();
